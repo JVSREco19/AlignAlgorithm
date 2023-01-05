@@ -8,18 +8,14 @@ def remove_repetidos(lista):
     return l
 
 
-archive = open("BioLip_X_M-CSA.csv")
+archive = open("BioLiP_2013-03-6_nr.txt")
 listOfIDs=[]
 counter = 0
 for line in archive:
-  if (counter == 0):
-    counter = 1
-    continue
-  line = line.split(',')
+  line = line.split()
   listOfIDs.append(line[0])
 archive.close()
-
 listOfIDs = remove_repetidos(listOfIDs)
-archive = open("listOfPDBIDs.txt","w")
+archive = open("listOfPDBIDsBIOLIP.txt","w")
 archive.write(' '.join(listOfIDs))
 archive.close()
