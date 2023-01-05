@@ -1,6 +1,5 @@
 from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
-from Bio.Seq import Seq
 from Bio import SeqIO
 
 seq_1NOS = next(SeqIO.parse(
@@ -14,6 +13,7 @@ seq_3NSE = next(SeqIO.parse(
 
 
 alignments = pairwise2.align.globalxx(seq_3NOS.seq, seq_3NSE.seq)
+
 
 for i in alignments:
   print(format_alignment(*i))
