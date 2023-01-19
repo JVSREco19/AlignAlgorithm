@@ -1,5 +1,3 @@
-import numpy as np
-import pandas as pd
 import requests
 import bs4
 import lxml.etree as xml
@@ -18,7 +16,7 @@ for line in listOfIdsBIO:
     idsListBIO = line.split()
 
 listOfIdsBIO.close()
-print(idsListBIO)
+
 def remove_repetidos(lista):
     l = []
     
