@@ -4,14 +4,10 @@ import lxml.etree as xml
 import re
 
 homologuesFile = open("homologues.txt", "w")
-listOfIds = open("listOfPDBIDs.txt")
+
 listOfIdsBIO = open("listOfPDBIDsBIOLIP.txt")
 idsList = []
 idsListBIO = []
-for line in listOfIds:
-    idsList = line.split()
-    
-listOfIds.close()
 for line in listOfIdsBIO:
     idsListBIO = line.split()
 
@@ -42,7 +38,7 @@ for counter in range(1,1006):
 
     LIT = Lit[4]
     print(LIT)
-    if(idsList.count(LIT)==0):
+    if(idsListBIO.count(LIT)==0):
         print("Not in the list")
         continue
     
