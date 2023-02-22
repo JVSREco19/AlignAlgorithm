@@ -1,12 +1,34 @@
 import re
+from Bio import Align
+
 homologuesFile = open("homologues.txt")
+mutationFile = open("mutationsOneOnly.txt","w")
 
 
-def compare_vectors(vector1, vector2):
+def remove_repetidos(lista):
+    l = []
+    for i in lista:
+      if i[0:len(i)] not in l:
+        l.append(i[0:len(i)])
+
+      l.sort()
+      
+    return l
+
+
+def compare_vectors(list1, list2):
     result = []
-    for i in range(len(vector1)):
-        if vector1[i] != vector2[i]:
-            result.append((vector1[i], vector2[i]))
+    for i in range(len(list1)):
+        if list1[i] != list2[i]:
+            result.append((list1[i], list2[i]))
+    
+    if result.__len__() == 1:
+        print(result)
+        print(list1,list2)
+        result = result[0]
+    else:
+        result = None
+      
     return result
 
 def compareSequences(mainSeq,senquencesToCompare):
@@ -14,21 +36,22 @@ def compareSequences(mainSeq,senquencesToCompare):
     compareLigands= []
     mutations = []
     for i in senquencesToCompare:
-        for j in i:
-            aux = re.findall(r'[a-zA-Z]{1,5}', j)
+            aux = re.findall(r'[a-zA-Z]{1,5}', i)
             if (aux.__len__() == ligands.__len__()):
                 compareLigands.append(aux)
-    
-
-    
+  
     for i in compareLigands:
         if(i == ligands):
             continue
         else:
-            mutations.append(compare_vectors(ligands, i))
+            resultOfComparation = compare_vectors(ligands, i)
+            if resultOfComparation != None:
+                mutations.append(resultOfComparation)
             
-    
-    
+    if mutations == [] or mutations== None:
+        mutations = None
+        print("NoMutations")
+       
     return mutations
     
 
@@ -36,8 +59,8 @@ def findEqualBindingSites(bindingSite,vet):
     seqListToCompare = []
     for j in vet:
         for i in j:
-            if (i[i.__len__()-2] == bindingSite):
-                    seq = i[:i.__len__()-2]
+            if (i[1] == bindingSite):
+                    seq = i[0]
                     seqListToCompare.append(seq)
     return seqListToCompare
 
@@ -46,50 +69,54 @@ def findSeq(template):
     allProtSeq = []
     bioLipFile = open("BioLiP_2013-03-6_nr.txt")
     for line in bioLipFile:
+        
+            
         lineVet = line.split('\t')
        
             
         if(lineVet[0]==template):
-            seqVet = lineVet[7:lineVet.__len__()-9]
             
-            stopCondition = False
-            while (stopCondition == False):
-                try:
-                    seqVet.remove('')
-
-                except ValueError:
-                    stopCondition = True
-                
-            for i in range(seqVet.__len__()-1,-1, -2):
-                seqVet.pop(i)
-            
+            seqVet = []
+            seqVet.append(lineVet[7])
             seqVet.append(lineVet[4])
             seqVet.append(lineVet[0])
-            
             allProtSeq.append(seqVet)
+    bioLipFile.close()
     return allProtSeq
             
+markTheProgress = 0
 
 for line in homologuesFile:
+    markTheProgress += 1
     line = line.split()
+    print(str(markTheProgress)+ ' of 620')
     mainProtein = line[0]
+    allProtMutations = []
     homologues = line[1:line.__len__()]
     proteinSequences = []
     for i in line:
-        proteinSequences.insert(line.index(i), findSeq(i))
-    
+        proteinSequences.append(findSeq(i))
+        
     for i in proteinSequences[0]:
         if(i[i.__len__()-1] == mainProtein):
-            mainSequence = i[:i.__len__()-2]
-            
-            bindingSite = i[i.__len__()-2]
+            mainSequence = i[0]
+            bindingSite = i[1]
             senquencesToCompare = findEqualBindingSites(bindingSite,proteinSequences[1:])
+            if(senquencesToCompare == [] or senquencesToCompare == None):
+                continue
             
-            for seq in mainSequence:
-                mutations = compareSequences(seq,senquencesToCompare)
-                print(mutations)
-                
+            mutations = compareSequences(mainSequence, senquencesToCompare)
+            if mutations == None or mutations[0] == []:
+                continue
+            allProtMutations.extend(mutations)
+    if(allProtMutations == None or allProtMutations == []):
+        NoMutationFile = open('NoMutatioFile.txt','a')
+        NoMutationFile.write(mainProtein + '\n')
+        continue
+    allProtMutations = remove_repetidos(allProtMutations)
+    for stringToWrite in allProtMutations:
+        mutationFile.write(
+            mainProtein + ' ' + str(stringToWrite[0])+',' + str(stringToWrite[1]) + "\n")
+
     
-    break
-    
-    
+mutationFile.close()
