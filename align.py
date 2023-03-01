@@ -8,8 +8,8 @@ mutationFile = open("mutationsOneOnly.txt","w")
 def remove_repetidos(lista):
     l = []
     for i in lista:
-      if i[0:len(i)] not in l:
-        l.append(i[0:len(i)])
+      if i not in l:
+        l.append(i)
 
       l.sort()
       
@@ -67,12 +67,14 @@ def findEqualBindingSites(bindingSite,vet):
 
 def findSeq(template):
     allProtSeq = []
+    metalList = ['CD', 'SB', "HG","GD","CO","U","NI","CU","NA",'K','MN','CA','MG','FE','ZN']
     bioLipFile = open("BioLiP_2013-03-6_nr.txt")
     for line in bioLipFile:
         
             
         lineVet = line.split('\t')
-       
+        if(lineVet[4] in metalList): #Verifies if it is a metal ligand
+            continue
             
         if(lineVet[0]==template):
             
