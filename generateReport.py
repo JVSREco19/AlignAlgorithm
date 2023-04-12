@@ -54,9 +54,10 @@ vetRepeatedLigands.sort()
 
 vetLigandResidues = remove_repetidos(vetRepeatedLigands)
 
+reportFile.write("Ligand"+ ";" + "Size" + ";" + "Num of occurrences"+'\n')
 for i in vetLigandResidues:
   repeatedNum  = vetRepeatedLigands.count(i)
-  reportFile.write(str(i[0]) + ", size: "+ str(i[1]) +" residues \t Number of cases: "+ str(repeatedNum)+'\n' )
+  reportFile.write('"'+str(i[0])+'"' + ";" + str(i[1]) + ";" + str(repeatedNum)+'\n')
  
   for x in range(0,repeatedNum):
     vetRepeatedLigands.remove(i)
