@@ -14,12 +14,14 @@ for line in homologuesFile:
     if(name != proteinLIT):
       continue
     ligand = splittedLine[4]
+    chain = splittedLine[5]
     residues = splittedLine[7]
     num = splittedLine[11]
     if(num == ''):
       num  = "NA"
     tempList = []
     tempList.append(name)
+    tempList.append(chain)
     tempList.append(num)
     tempList.append(ligand)
     tempList.append(residues)
@@ -29,7 +31,8 @@ homologuesFile.close()
 
 newFormatedProtFile = open("proteinsFormated.txt","w")
 for i in finalList:
-  newFormatedProtFile.write(i[0] + ' ' + i[1] + ' '+i[2] + ' '+i[3]+ '\n')
+  newFormatedProtFile.write(
+      i[0] + ' ' + i[1] + ' '+i[2] + ' '+i[3] + ' '+i[4] + '\n')
   
 newFormatedProtFile.close()
 
