@@ -1,4 +1,4 @@
-bioLipFile = open("BioLiP_2013-03-6_nr.txt")
+bioLipFile = open("BioLIPNonRedundanct.txt")
 
 vetLines = bioLipFile.readlines()
 
@@ -7,7 +7,7 @@ bioLipFile.close()
 metalList = ['CD', 'SB', "HG", "GD", "CO", "U", "NI",
              "CU", "NA", 'K', 'MN', 'CA', 'MG', 'FE', 'ZN']
 
-bioLipFile = open("BioLiP_2013-03-6_nr.txt")
+bioLipFile = open("BioLIPNonRedundanct.txt")
 
 vetProteins = []
 vetLigands = []

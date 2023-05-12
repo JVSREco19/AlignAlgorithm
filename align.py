@@ -4,7 +4,9 @@ from Bio import Align
 homologuesFile = open("homologues.txt")
 mutationFile = open("mutationsOneOnly.txt","w")
 
-
+numOfHomoLines = homologuesFile.readlines().__len__()
+homologuesFile.close()
+homologuesFile = open("homologues.txt")
 def remove_repetidos(lista):
     l = []
     for i in lista:
@@ -68,7 +70,7 @@ def findEqualBindingSites(bindingSite,vet):
 def findSeq(template):
     allProtSeq = []
     metalList = ['CD', 'SB', "HG","GD","CO","U","NI","CU","NA",'K','MN','CA','MG','FE','ZN']
-    bioLipFile = open("BioLiP_2013-03-6_nr.txt")
+    bioLipFile = open("BioLIPNonRedundanct.txt")
     for line in bioLipFile:
         
             
@@ -91,7 +93,7 @@ markTheProgress = 0
 for line in homologuesFile:
     markTheProgress += 1
     line = line.split()
-    print(str(markTheProgress)+ ' of 620')
+    print(str(markTheProgress)+ " of "+numOfHomoLines )
     mainProtein = line[0]
     allProtMutations = []
     homologues = line[1:line.__len__()]
@@ -120,5 +122,6 @@ for line in homologuesFile:
         mutationFile.write(
             mainProtein + ' ' + str(stringToWrite[0])+',' + str(stringToWrite[1]) + "\n")
 
+homologuesFile.close()
     
 mutationFile.close()
